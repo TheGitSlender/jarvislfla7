@@ -1,5 +1,9 @@
 # Deploy — Hackathon Checklist
 
+> [!WARNING]
+> **Superseded.** See `docs/DEPLOY_RENDER.md` for the current deployment guide.
+> The app now uses SQLite (no Supabase) and only requires GROQ_API_KEY + HF_API_KEY.
+
 ## Step 1 — Supabase (5 min)
 
 1. Create free project at supabase.com

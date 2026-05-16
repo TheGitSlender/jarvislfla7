@@ -98,22 +98,21 @@ All frontend files written:
 
 ## What Still Needs to Be Built / Run
 
-### Code changes (blocked on PD-1 + PD-2)
-- [ ] Replace Anthropic client in `chat.py` with Groq SDK (or HF/Ollama)
-- [ ] Add `tts.py` backend endpoint → HF `mms-tts-ara` → return audio bytes
-- [ ] Update `frontend/app/chat/page.tsx` to play audio blob from backend instead of `speechSynthesis`
-- [ ] Update `requirements.txt` with `groq` package (drop `anthropic`)
-- [ ] Update `.env.example` to replace `ANTHROPIC_API_KEY` with `GROQ_API_KEY`
+### Code changes
+- [x] Replace Anthropic client in chat.py with Groq SDK
+- [x] Add tts.py backend endpoint (HF mms-tts-ara)
+- [x] Update requirements.txt with groq package
+- [x] Update .env.example to replace ANTHROPIC_API_KEY with GROQ_API_KEY
+- [x] Replace Supabase with SQLite + in-memory numpy RAG (no external DB needed)
+- [x] Remove supabase dependency from requirements.txt
 
 ### Setup (requires you to act)
-- [ ] **Fill `.env`** with actual keys (GROQ_API_KEY, SUPABASE_URL, SUPABASE_KEY, HF_API_KEY)
-- [ ] **Run `schema.sql`** in Supabase SQL Editor (creates tables + demo profiles)
-- [ ] **Run `seed_kb.py`** to embed + insert the 46 knowledge chunks
-- [ ] **Run `npm install`** in `frontend/`
+- [ ] **Fill .env** with actual keys (GROQ_API_KEY, HF_API_KEY)
+- [ ] **Run npm install** in frontend/
 
-### Verification checklist (run locally before deploy)
+### Verification checklist (run locally with .env keys set)
 - [ ] `GET /health` returns `{"status": "ok"}`
-- [ ] `GET /api/farmers` returns Karim + Fatima with their UUIDs
+- [ ] `GET /api/farmers` returns Karim + Fatima with their IDs
 - [ ] `POST /api/chat` with Karim's ID + "feuilles jaunes sur mes tomates" → relevant RAG chunk returned
 - [ ] `POST /api/chat` with "élections politiques" → topic classifier blocks, no LLM call
 - [ ] `POST /api/chat` with unknown question → low_confidence flag = true, escalation message

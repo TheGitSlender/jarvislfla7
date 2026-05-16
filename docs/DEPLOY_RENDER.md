@@ -1,20 +1,18 @@
  # Backend Deployment on Render
 
  This deployment uses Render for FastAPI and Vercel for frontend.
- It follows the repo's current backend structure.
+ No external database setup needed — SQLite creates automatically on first run.
 
  Backend (Render)
  1) Create a new Web Service in Render
  2) Connect the GitHub repo
- 3) Set root directory to `backend`
+ 3) Set root directory to backend
  4) Build command:
     - `pip install -r requirements.txt`
  5) Start command:
     - `uvicorn main:app --host 0.0.0.0 --port $PORT`
  6) Add environment variables:
     - `GROQ_API_KEY`
-    - `SUPABASE_URL`
-    - `SUPABASE_KEY`
     - `HF_API_KEY`
 
  Backend Smoke Checks
@@ -33,3 +31,5 @@
 
  Notes
  - Vercel is used for frontend only; backend remains on Render.
+ - SQLite database file is ephemeral on Render (resets on deploy). For a hackathon demo this is fine.
+ - Demo profiles (Karim, Fatima) are auto-seeded on first startup.

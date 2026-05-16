@@ -13,7 +13,7 @@
  Documentation Set
  - `docs/PLAN.md` - Execution plan for the remaining build window
  - `docs/REPO_STATE.md` - Current backend state, modules, and flow
- - `docs/SUPABASE_SETUP.md` - Supabase setup and knowledge base seeding
+ - `docs/SUPABASE_SETUP.md` - Supabase reference (deprecated — app now uses SQLite)
  - `docs/DEPLOY_RENDER.md` - Backend deploy on Render and frontend hookup
  - `docs/TEST_CHECKLIST.md` - Verification steps and demo smoke tests
 

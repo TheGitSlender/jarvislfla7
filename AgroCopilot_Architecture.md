@@ -2,6 +2,8 @@
 
 > [!NOTE] Document Purpose
 > This document covers the full product definition, business model, AI architecture, database design, guardrail system, and step-by-step build plan for JarvisLfla7. Written for a hackathon prototype that can be presented as a production-grade concept.
+>
+> **Current implementation note:** The database uses SQLite + in-memory numpy RAG instead of Supabase + pgvector. See `docs/REPO_STATE.md` for the current architecture. This doc is the full spec; the implemented scope is narrowed for the hackathon (see `STATUS.md`).
 
 ---
 

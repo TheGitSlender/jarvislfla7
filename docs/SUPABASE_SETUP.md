@@ -1,49 +1,22 @@
- # Supabase Setup and Knowledge Base Seeding
+ # Supabase Setup — SUPERSEDED
 
- This is the authoritative setup flow for the Supabase backend used by JarvisLfla7.
- It is derived from `backend/schema.sql` and `backend/seed_kb.py`.
+ As of the SQLite refactor, AgroCopilot no longer uses Supabase.
+ This doc is kept as reference only.
 
- Step 1 - Create Supabase Project
- - Go to https://supabase.com and create a free project
- - Keep database password and project region noted
+ ## What Changed
+ - Database: Supabase (PostgreSQL + pgvector) → SQLite (file-based)
+ - RAG: pgvector RPC → in-memory numpy cosine similarity
+ - Seeding: manual `seed_kb.py` → auto-embedded at first `rag.retrieve()` call
 
- Step 2 - Apply Schema
- - Open Supabase SQL Editor
- - Paste the contents of `backend/schema.sql`
- - Run the script
- - This creates:
-   - `farm_profiles`
-   - `conversations`
-   - `knowledge_chunks`
-   - RPC `match_knowledge_chunks`
-   - Demo profiles (Karim, Fatima)
+ ## Why
+ The SQLite + in-memory RAG approach eliminated the need for:
+ - A Supabase project
+ - API keys (SUPABASE_URL, SUPABASE_KEY)
+ - Running schema.sql manually
+ - Running seed_kb.py manually
 
- Step 3 - Collect API Credentials
- - Supabase Dashboard → Settings → API
- - Copy these values:
-   - `SUPABASE_URL`
-   - `SUPABASE_KEY` (anon key)
+ The app now starts with `pip install` + `uvicorn` and works immediately with just two env vars: GROQ_API_KEY and HF_API_KEY.
 
- Step 4 - Seed Knowledge Base
- - Run locally, not in Supabase
- - From `backend/`:
-   - Create virtual environment
-   - Install requirements
-   - Create `.env` from `.env.example`
-   - Fill in:
-     - `SUPABASE_URL`
-     - `SUPABASE_KEY`
-     - `GROQ_API_KEY` (for chat testing)
-     - `HF_API_KEY` (for STT/TTS testing)
- - Execute:
-   - `python seed_kb.py`
- - Expected output: 46 chunks inserted
-
- Step 5 - Verify
- - In Supabase Table Editor:
-   - `farm_profiles` contains demo profiles
-   - `knowledge_chunks` contains ~46 rows
-
- Notes
- - RLS is not configured by schema; leave disabled for hackathon demo.
- - `knowledge_chunks.embedding` is vector(768) and must match `multilingual-e5-base`.
+ ## If you want to restore Supabase later
+ The schema is preserved in `backend/schema.sql` for reference.
+ The old `backend/db.py` pattern using Supabase client is in git history.

@@ -4,11 +4,10 @@
 
  Health and Connectivity
  - `GET /health` returns `{"status": "ok"}`
- - Backend can reach Supabase (no errors in logs)
+ - App starts without errors (GROQ_API_KEY must be set)
 
  Data and RAG
  - `GET /api/farmers` returns Karim + Fatima
- - `knowledge_chunks` table has ~46 rows
  - `POST /api/chat` with Karim's ID and tomato question returns relevant guidance
  - Low-confidence question triggers escalation
 

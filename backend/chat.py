@@ -1,14 +1,16 @@
 import os
+import re
+import unicodedata
 from datetime import datetime
 from groq import Groq
 from dotenv import load_dotenv
-from db import get_db
+import db
 from rag import retrieve
 from guardrails import is_agricultural, get_escalation_contact, check_dangerous_patterns
 
 load_dotenv()
 
-SYSTEM_PROMPT = """نتا AgroCopilot، مستشار فلاحي بالذكاء الاصطناعي مصمم خصيصًا للفلاحين الصغار فالمغرب. كتهدر بشكل رئيسي بالدارجة (المغربية)، وتقدر تبدل للفرنسية إلا طلب منك الفلاح بشكل واضح.
+SYSTEM_PROMPT = """نتا JarvisLfla7، مستشار فلاحي بالذكاء الاصطناعي مصمم خصيصًا للفلاحين الصغار فالمغرب. كتهدر بشكل رئيسي بالدارجة (المغربية)، وتقدر تبدل للفرنسية إلا طلب منك الفلاح بشكل واضح.
 
 دور ديالك:
 نتا فلاح خبير وموثوق كتنصح هاد الفلاح الخاص بزمان. كتعرف أرضو بالعمق. كتوجهو بشكل استباقي خلال الموسم الفلاحي كامل — التخطيط، القرارات فوسط الموسم، والتقييم بعد الحصاد.
@@ -32,9 +34,22 @@ SYSTEM_PROMPT = """نتا AgroCopilot، مستشار فلاحي بالذكاء �
 
 النبرة: دافية، مباشرة، عملية. بحال الجار الموثوق اللي صدف يكون فلاح خبير. ماشي رسمية. ماشي شركاتية.
 
-اللغة: الافتراضي هو الدارجة المغربية. استعمل المفردات البسيطة. تجنب الجمل المعقدة. إلا كان المصطلح التقني ضروري، قولو بالدارجة أولاً، ثم بالفرنسية بين قوسين."""
+اللغة: الافتراضي هو الدارجة المغربية. استعمل المفردات البسيطة. تجنب الجمل المعقدة. إلا كان المصطلح التقني ضروري، قولو بالدارجة أولاً، ثم بالفرنسية بين قوسين.
+10. أكتب الردود فقط بالحروف العربية واللاتينية (الفرنسية). ما تستعملش الكتابة الصينية ولا اليابانية ولا أي كتابة أخرى غير عربية أو لاتينية."""
+
+CJK_PATTERN = re.compile(
+    "[\u4e00-\u9fff"     # CJK Unified Ideographs
+    "\u3400-\u4dbf"     # CJK Extension A
+    "\uf900-\ufaff"     # CJK Compatibility Ideographs
+    "\U0002f800-\U0002fa1f"  # CJK Compatibility Supplement
+    "]"
+)
 
 NON_AGRI_RESPONSE = "غير قادر على المساعدة في هذا الموضوع. أنا متخصص فقط في الزراعة والفلاحة. واش عندك سؤال على الزراعة ديالك؟"
+
+
+def _strip_cjk(text: str) -> str:
+    return CJK_PATTERN.sub("", text)
 
 
 def build_farm_context(profile: dict) -> str:
@@ -84,49 +99,20 @@ def build_rag_context(chunks: list[dict], low_confidence: bool) -> str:
     return "\n".join(sections)
 
 
-def get_conversation_history(farmer_id: str, session_id: str, limit: int = 6) -> list[dict]:
-    db = get_db()
-    result = (
-        db.table("conversations")
-        .select("role, content")
-        .eq("farmer_id", farmer_id)
-        .eq("session_id", session_id)
-        .order("created_at", desc=True)
-        .limit(limit)
-        .execute()
-    )
-    turns = result.data or []
-    return list(reversed(turns))
-
-
-def save_turn(farmer_id: str, session_id: str, role: str, content: str, low_confidence: bool = False) -> None:
-    db = get_db()
-    db.table("conversations").insert({
-        "farmer_id": farmer_id,
-        "session_id": session_id,
-        "role": role,
-        "content": content,
-        "confidence_score": 0.5 if low_confidence else 1.0,
-    }).execute()
-
-
 def chat(farmer_id: str, message: str, session_id: str) -> tuple[str, bool]:
-    db = get_db()
-
-    # Layer 1: topic classifier
-    if not is_agricultural(message):
-        save_turn(farmer_id, session_id, "user", message)
-        save_turn(farmer_id, session_id, "assistant", NON_AGRI_RESPONSE)
-        return NON_AGRI_RESPONSE, False
-
-    # Load farm profile
-    profile_result = db.table("farm_profiles").select("*").eq("id", farmer_id).single().execute()
-    if not profile_result.data:
+    # Must load profile first to validate farmer exists
+    profile = db.get_profile(farmer_id)
+    if profile is None:
         raise ValueError("Profile not found")
-    profile = profile_result.data
 
-    # Load conversation history
-    history = get_conversation_history(farmer_id, session_id)
+    # Load conversation history before guardrail (used for follow-up detection)
+    history = db.get_conversation_history(farmer_id, session_id)
+
+    # Layer 1: topic classifier — skip if conversation already established
+    if not history and not is_agricultural(message):
+        db.save_turn(farmer_id, session_id, "user", message)
+        db.save_turn(farmer_id, session_id, "assistant", NON_AGRI_RESPONSE)
+        return NON_AGRI_RESPONSE, False
 
     # Retrieve RAG chunks
     crop_types = [c.get("crop") for c in profile.get("current_crops", []) if c.get("crop")]
@@ -161,14 +147,14 @@ def chat(farmer_id: str, message: str, session_id: str) -> tuple[str, bool]:
         messages=[{"role": "system", "content": system}, *messages],
     )
     reply = response.choices[0].message.content or ""
+    reply = _strip_cjk(reply)
 
-    # Layer 3 is enforced via system prompt (no additional post-processing for MVP)
     # Flag if dangerous patterns detected but still return response with warning
     if check_dangerous_patterns(reply):
         reply += "\n\n⚠️ تحقق دائمًا من أي جرعة مع موردك الزراعي المحلي قبل التطبيق."
 
     # Save both turns
-    save_turn(farmer_id, session_id, "user", message)
-    save_turn(farmer_id, session_id, "assistant", reply, low_confidence)
+    db.save_turn(farmer_id, session_id, "user", message, confidence_score=1.0)
+    db.save_turn(farmer_id, session_id, "assistant", reply, confidence_score=0.5 if low_confidence else 1.0)
 
     return reply, low_confidence

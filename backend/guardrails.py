@@ -14,6 +14,20 @@ AGRICULTURAL_KEYWORDS = {
     # Darija / Arabic
     "زراعة", "فلاحة", "محصول", "تربة", "ري", "أسمدة", "مرض", "حشرة",
     "طماطم", "قمح", "زيتون", "حقل", "بذور", "سقي", "حصاد",
+    "ورق", "وراق", "صفر", "صفار", "خضرة", "خضر", "دواء", "دوية",
+    "توم", "شجرة", "نبات", "زرع", "أرض", "أسمدة", "مؤونة", "موونة",
+    "بستاني", "عنب", "حبوب", "ثمار", "أمراض", "آفات", "نمو", "تسميد", "ماء",
+    "سماد", "مبيد", "مبيدات",
+    # English
+    "tomato", "tomatoes", "wheat", "olive", "olives", "leaf", "leaves",
+    "plant", "plants", "crop", "crops", "disease", "pest", "pests",
+    "water", "soil", "fertilizer", "harvest", "planting", "seed", "seeds",
+    "farm", "farming", "farmer", "vegetable", "vegetables", "fruit", "fruits",
+    "tree", "trees", "grow", "growing", "garden", "organic", "weed", "weeds",
+    "insect", "insects", "fungus", "fungal", "bacteria", "infection",
+    "irrigation", "drought", "rain", "weather", "climate",
+    "root", "roots", "flower", "flowers", "branch", "branches",
+    "prune", "pruning", "spray", "spraying", "mulch", "compost",
     # Common transliterations used in Darija writing
     "zra3a", "flacha", "mchakil", "tomatiw", "blé", "zitoune",
 }
