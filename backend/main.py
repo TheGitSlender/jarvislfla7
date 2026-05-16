@@ -7,7 +7,7 @@ from farmer_profile import router as profile_router
 from stt import router as stt_router
 from tts import router as tts_router
 
-app = FastAPI(title="AgroCopilot API")
+app = FastAPI(title="JarvisLfla7 API")
 
 app.add_middleware(
     CORSMiddleware,

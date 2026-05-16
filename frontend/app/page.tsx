@@ -92,7 +92,7 @@ export default function OnboardingPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="text-5xl mb-3">🌿</div>
-          <h1 className="text-3xl font-bold text-green-800">AgroCopilot</h1>
+          <h1 className="text-3xl font-bold text-green-800">JarvisLfla7</h1>
           <p className="text-stone-600 mt-1">مستشارك الزراعي الذكي</p>
           <p className="text-sm text-stone-400 mt-1">Your AI agronomist — in Darija</p>
         </div>

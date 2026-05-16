@@ -1,11 +1,11 @@
- # AgroCopilot Documentation Index
+ # JarvisLfla7 Documentation Index
 
  Purpose
  - Central index for hackathon documentation created during build mode.
  - Scope is backend and infrastructure only; frontend is intentionally out of scope.
 
  Source References
- - Product and full architecture spec: `AgroCopilot_Architecture.md`
+ - Product and full architecture spec: `JarvisLfla7_Architecture.md`
  - Current build status and decisions: `STATUS.md`
  - Deployment checklist: `DEPLOY.md`
  - Working context summary: `CLAUDE.md`

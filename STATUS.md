@@ -1,4 +1,4 @@
-# AgroCopilot — Build Status & Decisions Log
+# JarvisLfla7 — Build Status & Decisions Log
 
 Last updated: 2026-05-16
 
@@ -7,7 +7,7 @@ Last updated: 2026-05-16
 ## Build Phases
 
 ### ✅ Phase 0 — Architecture & Research
-- Reviewed full product spec (`AgroCopilot_Architecture.md`)
+- Reviewed full product spec (`JarvisLfla7_Architecture.md`)
 - Researched Darija NLP landscape (STT, LLM, TTS, embeddings)
 - Audited architecture doc, identified over-engineering for hackathon timeline
 - Key cuts: Alembic migrations, async memory extraction, multi-step onboarding, journal page

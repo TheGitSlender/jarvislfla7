@@ -37,7 +37,7 @@ function ChatInterface() {
     // Opening greeting
     setMessages([{
       role: "assistant",
-      text: "السلام عليكم! أنا AgroCopilot، مستشارك الزراعي. كيف يمكنني مساعدتك اليوم؟ 🌱",
+      text: "السلام عليكم! أنا JarvisLfla7، مستشارك الزراعي. كيف يمكنني مساعدتك اليوم؟ 🌱",
     }]);
   }, [farmerId, router]);
 
@@ -123,7 +123,7 @@ function ChatInterface() {
           ← رجوع
         </button>
         <div className="text-center">
-          <div className="font-semibold text-sm">🌿 AgroCopilot</div>
+          <div className="font-semibold text-sm">🌿 JarvisLfla7</div>
           {profile && (
             <div className="text-xs text-green-200">{profile.name} — {profile.region}</div>
           )}

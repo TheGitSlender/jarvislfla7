@@ -1,7 +1,7 @@
-# AgroCopilot — Full Architecture & Product Document
+# JarvisLfla7 — Full Architecture & Product Document
 
 > [!NOTE] Document Purpose
-> This document covers the full product definition, business model, AI architecture, database design, guardrail system, and step-by-step build plan for AgroCopilot. Written for a hackathon prototype that can be presented as a production-grade concept.
+> This document covers the full product definition, business model, AI architecture, database design, guardrail system, and step-by-step build plan for JarvisLfla7. Written for a hackathon prototype that can be presented as a production-grade concept.
 
 ---
 
@@ -58,7 +58,7 @@ Existing solutions (Plantix, generic agri-apps) fail on three axes:
 
 ## 2. Our Solution
 
-**AgroCopilot** is a persistent, voice-first AI agronomist that knows your specific farm and guides you through every decision across the full farming season — in Darija.
+**JarvisLfla7** is a persistent, voice-first AI agronomist that knows your specific farm and guides you through every decision across the full farming season — in Darija.
 
 It is **not** a disease detection app. Disease detection is one feature inside a larger system.
 
@@ -72,7 +72,7 @@ The product is built on three principles:
 
 ## 3. Added Value & Differentiation
 
-| Dimension | Plantix / Generic Apps | AgroCopilot |
+| Dimension | Plantix / Generic Apps | JarvisLfla7 |
 |---|---|---|
 | Language | English, Hindi, etc. | Darija, Tamazight, French |
 | Interface | Text + camera | Voice-first |
@@ -85,7 +85,7 @@ The product is built on three principles:
 
 ### The One-Line Differentiator
 
-> Plantix tells you what's wrong with your plant today. AgroCopilot knows your farm across seasons and tells you what to do before things go wrong.
+> Plantix tells you what's wrong with your plant today. JarvisLfla7 knows your farm across seasons and tells you what to do before things go wrong.
 
 ---
 
@@ -201,7 +201,7 @@ Companies like OCP Group, Fertima, Bayer CropScience, and Syngenta need:
 **Note:** AI never recommends a specific brand unless sponsored placement is disclosed; this must be handled transparently
 
 #### R2 — Cooperative Institutional Subscriptions
-Agricultural cooperatives (COPAG, CMV, others) can deploy AgroCopilot for their member farmers as a service.
+Agricultural cooperatives (COPAG, CMV, others) can deploy JarvisLfla7 for their member farmers as a service.
 **Model:** Flat monthly fee per cooperative, based on member count
 **Price range:** MAD 500–3,000/month per cooperative
 
@@ -486,7 +486,7 @@ Every API call to Claude is built from 5 layers stacked in order:
 ### Layer 1 — System Prompt (Full)
 
 ```
-You are AgroCopilot, an agricultural advisor AI designed specifically for
+You are JarvisLfla7, an agricultural advisor AI designed specifically for
 Moroccan smallholder farmers. You speak primarily in Darija (Moroccan Arabic),
 switching to French only if the farmer explicitly requests it.
 
@@ -537,7 +537,7 @@ then French in parentheses.
 
 ## 11. Context Awareness System
 
-This is the core of what makes AgroCopilot different from any generic chatbot.
+This is the core of what makes JarvisLfla7 different from any generic chatbot.
 
 ### How Farm Context is Injected
 
@@ -883,8 +883,8 @@ window.speechSynthesis.speak(utterance);
 
 ```bash
 # Frontend
-npx create-next-app@latest agrocopilot --typescript --tailwind --app
-cd agrocopilot
+npx create-next-app@latest JarvisLfla7 --typescript --tailwind --app
+cd JarvisLfla7
 
 # Backend
 mkdir backend && cd backend
@@ -1061,7 +1061,7 @@ for chunk in chunks:
 
 ## Appendix B — Pitch Summary Card
 
-**Product:** AgroCopilot
+**Product:** JarvisLfla7
 **One line:** A persistent, voice-first AI agronomist that knows your specific farm and guides you through every farming decision — in Darija.
 
 **Problem:**

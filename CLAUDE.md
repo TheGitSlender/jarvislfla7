@@ -1,8 +1,8 @@
-# AgroCopilot — Context for Claude Code
+# JarvisLfla7 — Context for Claude Code
 
 **What this is:** A voice-first AI agronomist for Moroccan smallholder farmers. Speaks Darija, holds a persistent farm profile, answers agricultural questions via a RAG-backed LLM pipeline.
 
-**Pitch:** Hackathon judges. Demo runs in Chrome on mobile. Full product spec → `AgroCopilot_Architecture.md`.
+**Pitch:** Hackathon judges. Demo runs in Chrome on mobile. Full product spec → `JarvisLfla7_Architecture.md`.
 
 ---
 

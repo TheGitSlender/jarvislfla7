@@ -1,5 +1,5 @@
 """
-Curated agronomic knowledge base for AgroCopilot.
+Curated agronomic knowledge base for JarvisLfla7.
 ~50 chunks covering tomatoes, wheat, olives, plus general topics.
 Language: French with Darija terms in parentheses.
 Each chunk: content + crop_type + topic metadata.

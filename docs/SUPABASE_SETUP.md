@@ -1,6 +1,6 @@
  # Supabase Setup and Knowledge Base Seeding
 
- This is the authoritative setup flow for the Supabase backend used by AgroCopilot.
+ This is the authoritative setup flow for the Supabase backend used by JarvisLfla7.
  It is derived from `backend/schema.sql` and `backend/seed_kb.py`.
 
  Step 1 - Create Supabase Project

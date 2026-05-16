@@ -1,4 +1,5 @@
 import re
+import unicodedata
 
 AGRICULTURAL_KEYWORDS = {
     # French
@@ -32,15 +33,24 @@ ESCALATION_CONTACTS = {
 }
 
 
+def normalize_text(text: str) -> str:
+    normalized = unicodedata.normalize("NFKD", text)
+    return "".join(ch for ch in normalized if not unicodedata.combining(ch)).lower()
+
+
+NORMALIZED_KEYWORDS = {normalize_text(keyword) for keyword in AGRICULTURAL_KEYWORDS}
+
+
 def is_agricultural(message: str) -> bool:
-    lowered = message.lower()
-    return any(kw in lowered for kw in AGRICULTURAL_KEYWORDS)
+    normalized = normalize_text(message)
+    return any(kw in normalized for kw in NORMALIZED_KEYWORDS)
 
 
 def get_escalation_contact(region: str | None) -> str:
     if region:
+        normalized_region = normalize_text(region)
         for key, contact in ESCALATION_CONTACTS.items():
-            if key in region.lower():
+            if key in normalized_region:
                 return contact
     return ESCALATION_CONTACTS["default"]
 
