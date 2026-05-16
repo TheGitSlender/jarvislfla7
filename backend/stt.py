@@ -1,5 +1,5 @@
 import os
-import httpx
+from groq import Groq
 from fastapi import APIRouter, File, UploadFile, HTTPException
 from dotenv import load_dotenv
 
@@ -7,33 +7,25 @@ load_dotenv()
 
 router = APIRouter()
 
-HF_MODEL = "ychafiqui/whisper-small-darija"
-HF_URL = f"https://api-inference.huggingface.co/models/{HF_MODEL}"
-
 
 @router.post("/api/stt")
 async def speech_to_text(audio: UploadFile = File(...)):
-    hf_key = os.environ.get("HF_API_KEY", "")
-    if not hf_key:
-        raise HTTPException(status_code=503, detail="HuggingFace API key not configured")
+    api_key = os.environ.get("GROQ_API_KEY", "")
+    if not api_key:
+        raise HTTPException(status_code=503, detail="Groq API key not configured")
 
     audio_bytes = await audio.read()
+    filename = audio.filename or "audio.webm"
 
-    async with httpx.AsyncClient(timeout=30.0) as client:
-        response = await client.post(
-            HF_URL,
-            headers={"Authorization": f"Bearer {hf_key}"},
-            content=audio_bytes,
-        )
+    client = Groq(api_key=api_key)
+    transcription = client.audio.transcriptions.create(
+        file=(filename, audio_bytes),
+        model="whisper-large-v3",
+        language="ar",
+        response_format="text",
+    )
 
-    if response.status_code != 200:
-        raise HTTPException(
-            status_code=502,
-            detail=f"STT service error: {response.status_code} — {response.text[:200]}",
-        )
-
-    data = response.json()
-    transcript = data.get("text", "").strip()
+    transcript = transcription.strip() if isinstance(transcription, str) else transcription.text.strip()
 
     if not transcript:
         raise HTTPException(status_code=422, detail="No speech detected")

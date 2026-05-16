@@ -26,9 +26,9 @@ def validate_env():
             f"Missing required environment variables: {', '.join(missing)}. "
             f"Set them in backend/.env or in the deployment dashboard."
         )
-    if not os.environ.get("HF_API_KEY"):
+    if not os.environ.get("ELEVENLABS_API_KEY"):
         import warnings
-        warnings.warn("HF_API_KEY not set — STT and TTS endpoints will return 503")
+        warnings.warn("ELEVENLABS_API_KEY not set — TTS endpoint will return 503")
 
 app.add_middleware(
     CORSMiddleware,

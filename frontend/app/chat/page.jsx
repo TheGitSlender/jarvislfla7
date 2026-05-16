@@ -51,20 +51,10 @@ function AssistantScreen() {
     const ac = new AbortController();
     abortRef.current = ac;
     const audioUrl = await fetchTTS(text, ac.signal);
-    if (ac.signal.aborted) return;
-    if (audioUrl) {
-      const el = new Audio(audioUrl);
-      el.onended = () => URL.revokeObjectURL(audioUrl);
-      el.play().catch(() => {});
-      return;
-    }
-    if (ac.signal.aborted) return;
-    if (typeof window === "undefined" || !window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "ar";
-    utterance.rate = 0.88;
-    window.speechSynthesis.speak(utterance);
+    if (ac.signal.aborted || !audioUrl) return;
+    const el = new Audio(audioUrl);
+    el.onended = () => URL.revokeObjectURL(audioUrl);
+    el.play().catch(() => {});
   }, []);
 
   const sendMessage = React.useCallback(async (text) => {

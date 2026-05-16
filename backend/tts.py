@@ -9,11 +9,11 @@ load_dotenv()
 
 router = APIRouter()
 
-HF_TTS_URL = "https://api-inference.huggingface.co/models/facebook/mms-tts-ara"
+ELEVENLABS_VOICE_ID = "OfGMGmhShO8iL9jCkXy8"  # GHIZLANE — Moroccan Darija
+ELEVENLABS_URL = f"https://api.elevenlabs.io/v1/text-to-speech/{ELEVENLABS_VOICE_ID}"
+ELEVENLABS_MODEL = "eleven_multilingual_v2"
 
-# MMS-TTS returns audio/flac by default (~50–200 KB per response)
-# Max recommended input: ~500 chars — long text gets cut off silently
-MAX_CHARS = 500
+MAX_CHARS = 800
 
 
 class TTSRequest(BaseModel):
@@ -22,26 +22,30 @@ class TTSRequest(BaseModel):
 
 @router.post("/api/tts")
 async def text_to_speech(req: TTSRequest):
-    hf_key = os.environ.get("HF_API_KEY", "")
-    if not hf_key:
-        # Fallback: tell the client to use browser TTS
-        return Response(status_code=503, content=b"", media_type="audio/flac")
+    api_key = os.environ.get("ELEVENLABS_API_KEY", "")
+    if not api_key:
+        return Response(status_code=503, content=b"", media_type="audio/mpeg")
 
-    # Truncate to avoid silent cutoff on the model side
     text = req.text[:MAX_CHARS]
 
-    async with httpx.AsyncClient(timeout=20.0) as client:
+    async with httpx.AsyncClient(timeout=30.0) as client:
         resp = await client.post(
-            HF_TTS_URL,
+            ELEVENLABS_URL,
             headers={
-                "Authorization": f"Bearer {hf_key}",
+                "xi-api-key": api_key,
                 "Content-Type": "application/json",
             },
-            json={"inputs": text},
+            json={
+                "text": text,
+                "model_id": ELEVENLABS_MODEL,
+                "voice_settings": {
+                    "stability": 0.5,
+                    "similarity_boost": 0.75,
+                },
+            },
         )
 
     if resp.status_code != 200:
-        # Surface the error so the frontend can fall back to browser TTS
-        return Response(status_code=502, content=b"", media_type="audio/flac")
+        return Response(status_code=502, content=b"", media_type="audio/mpeg")
 
-    return Response(content=resp.content, media_type="audio/flac")
+    return Response(content=resp.content, media_type="audio/mpeg")

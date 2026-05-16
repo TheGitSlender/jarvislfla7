@@ -1,6 +1,23 @@
-/backend/.env
-/backend/*.pyc
-/backend/venv/
+# env
+backend/.env
+frontend/.env.local
+
+# python
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+**/*.pyc
 *.db
-node_modules/
-node_modules/
+*.db-shm
+*.db-wal
+
+# next.js
+frontend/.next/
+frontend/node_modules/
+frontend/package-lock.json
+frontend/tsconfig.tsbuildinfo
+
+# misc
+src/
+FIXES.md
+jarvislfla7.zip

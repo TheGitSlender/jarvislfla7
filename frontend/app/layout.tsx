@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ar" dir="rtl">
+    <html lang="en">
       <body className={`${instrumentSerif.variable} ${geist.variable} ${jetbrainsMono.variable}`}>{children}</body>
     </html>
   );
