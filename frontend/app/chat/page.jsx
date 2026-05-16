@@ -26,6 +26,7 @@ function AssistantScreen() {
   const transcriptRef = React.useRef(null);
   const mediaRef = React.useRef(null);
   const chunksRef = React.useRef([]);
+  const abortRef = React.useRef(null);
 
   React.useEffect(() => {
     if (!farmerId) { router.push("/"); return; }
@@ -46,13 +47,18 @@ function AssistantScreen() {
   }, [audio.active, transcribing]);
 
   const speak = React.useCallback(async (text) => {
-    const audioUrl = await fetchTTS(text);
+    abortRef.current?.abort();
+    const ac = new AbortController();
+    abortRef.current = ac;
+    const audioUrl = await fetchTTS(text, ac.signal);
+    if (ac.signal.aborted) return;
     if (audioUrl) {
       const el = new Audio(audioUrl);
       el.onended = () => URL.revokeObjectURL(audioUrl);
       el.play().catch(() => {});
       return;
     }
+    if (ac.signal.aborted) return;
     if (typeof window === "undefined" || !window.speechSynthesis) return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
@@ -179,26 +185,16 @@ function AssistantScreen() {
             </div>
           </>
         ) : (
-          <div className="chat-history" style={{ width: "100%", maxWidth: 640, margin: "0 auto", padding: "80px 0 20px", overflow: "auto", flex: 1 }}>
+          <div className="chat-history">
             {messages.map((m, i) => (
               <div key={i} className={`chat-msg ${m.role === "user" ? "chat-msg-user" : "chat-msg-assist"}`} style={{
                 display: "flex", marginBottom: 16,
                 justifyContent: m.role === "user" ? "flex-end" : "flex-start"
               }}>
-                <div style={{
-                  maxWidth: "80%",
-                  padding: "12px 16px",
-                  borderRadius: m.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
-                  background: m.role === "user" ? "var(--forest)" : "rgba(254,250,224,0.85)",
-                  color: m.role === "user" ? "var(--cornsilk)" : "var(--ink)",
-                  border: m.role === "user" ? "none" : "0.5px solid var(--ink-5)",
-                  fontSize: 14,
-                  lineHeight: 1.5,
-                  fontFamily: "var(--sans)",
-                }}>
+                <div className="chat-msg-content">
                   {m.text}
                   {m.lowConfidence && (
-                    <div style={{ marginTop: 8, fontSize: 11, color: "var(--olive-bright)", borderTop: "0.5px solid rgba(254,250,224,0.2)", paddingTop: 6 }}>
+                    <div className="chat-msg-lowconf">
                       ⚠️ معلومات محدودة
                     </div>
                   )}
@@ -207,7 +203,7 @@ function AssistantScreen() {
             ))}
             {loading && (
               <div style={{ display: "flex", justifyContent: "flex-start", marginBottom: 16 }}>
-                <div style={{ background: "rgba(254,250,224,0.85)", border: "0.5px solid var(--ink-5)", borderRadius: "18px 18px 18px 4px", padding: "14px 18px" }}>
+                <div className="chat-typing">
                   <div className="typing-dots" style={{ display: "flex", gap: 4 }}>
                     <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--olive)", animation: "status-pulse 1.4s infinite" }} />
                     <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--olive)", animation: "status-pulse 1.4s infinite", animationDelay: "0.2s" }} />

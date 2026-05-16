@@ -1,1 +1,1 @@
-self.__NEXT_FONT_MANIFEST='{"pages":{},"app":{},"appUsingSizeAdjust":false,"pagesUsingSizeAdjust":false}';
+self.__NEXT_FONT_MANIFEST='{"pages":{},"app":{"/Users/malakmekyassi/Documents/GitHub/jarvislfla7/frontend/app/layout":["static/media/e6099e249fd938cc-s.p.woff2","static/media/9cc5b37ab1350db7-s.p.woff2","static/media/558ca1a6aa3cb55e-s.p.woff2","static/media/b070f55578db020d-s.p.ttf","static/media/9018efeb338d2e1f-s.p.ttf","static/media/0ac2f6a35fea3e11-s.p.ttf","static/media/78c3a7085a798956-s.p.ttf"]},"appUsingSizeAdjust":true,"pagesUsingSizeAdjust":false}';

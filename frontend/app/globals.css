@@ -1,7 +1,5 @@
 /* JarvisLfla7 — global stylesheet */
 
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
-
 :root {
   --cornsilk: #FEFAE0;
   --cornsilk-2: #F5EFD0;
@@ -17,9 +15,9 @@
   --ink-4: rgba(40, 54, 24, 0.28);
   --ink-5: rgba(40, 54, 24, 0.12);
   --paper: #FEFAE0;
-  --serif: "Instrument Serif", "EB Garamond", Georgia, serif;
-  --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --serif: var(--font-serif), "EB Garamond", Georgia, serif;
+  --sans: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
 }
 
 * { box-sizing: border-box; }
@@ -899,6 +897,39 @@ button { font-family: inherit; }
 }
 .auth-legal { font-size: 11.5px; color: var(--ink-3); margin-top: 28px; line-height: 1.5; }
 .auth-legal a { color: var(--ink-2); text-decoration: underline; cursor: pointer; }
+
+/* chat bubbles */
+.chat-msg-content {
+  max-width: 80%;
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  font-family: var(--sans);
+}
+.chat-msg-user .chat-msg-content {
+  border-radius: 18px 18px 4px 18px;
+  background: var(--forest);
+  color: var(--cornsilk);
+}
+.chat-msg-assist .chat-msg-content {
+  border-radius: 18px 18px 18px 4px;
+  background: rgba(254,250,224,0.85);
+  color: var(--ink);
+  border: 0.5px solid var(--ink-5);
+}
+.chat-msg-lowconf {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--olive-bright);
+  border-top: 0.5px solid rgba(254,250,224,0.2);
+  padding-top: 6px;
+}
+.chat-typing {
+  background: rgba(254,250,224,0.85);
+  border: 0.5px solid var(--ink-5);
+  border-radius: 18px 18px 18px 4px;
+  padding: 14px 18px;
+}
 
 @media (max-width: 900px) {
   .ln-hero { grid-template-columns: 1fr; min-height: auto; padding: 24px; }

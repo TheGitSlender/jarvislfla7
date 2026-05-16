@@ -50,12 +50,13 @@ export async function transcribeAudio(blob: Blob): Promise<string> {
  * Returns an object URL for the audio blob, or null if the backend
  * returned an error (caller should fall back to browser speechSynthesis).
  */
-export async function fetchTTS(text: string): Promise<string | null> {
+export async function fetchTTS(text: string, signal?: AbortSignal): Promise<string | null> {
   try {
     const res = await fetch(`${API}/api/tts`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text }),
+      signal,
     });
     if (!res.ok) return null;
     const blob = await res.blob();

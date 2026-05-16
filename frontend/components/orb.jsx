@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 
 const ORB_COLORS = {
@@ -296,27 +297,40 @@ function smoothClosed(pts) {
 }
 
 function Orb({ variant = "bloom", level = 0, listening = false, intensity = 1, size = 360 }) {
-  const tRef = React.useRef(0);
-  const [, force] = React.useState(0);
+  const orbitRef = React.useRef(null);
+  const stateRef = React.useRef({ t: 0 });
+  const levelRef = React.useRef(level);
+  const listeningRef = React.useRef(listening);
+  const intensityRef = React.useRef(intensity);
+  levelRef.current = level;
+  listeningRef.current = listening;
+  intensityRef.current = intensity;
+
   React.useEffect(() => {
     let raf;
     const loop = () => {
-      tRef.current += 0.016;
-      force((x) => (x + 1) % 1e6);
+      stateRef.current.t += 0.016;
+      const t = stateRef.current.t;
+      const node = orbitRef.current;
+      if (node) {
+        const lvl = levelRef.current;
+        const lst = listeningRef.current;
+        const int = intensityRef.current;
+        const driftX = Math.sin(t * 0.55) * (8 + (lst ? 22 : 0) + lvl * 26 * int);
+        const driftY = Math.cos(t * 0.4) * (6 + (lst ? 16 : 0) + lvl * 20 * int);
+        const rotate = Math.sin(t * 0.3) * 4;
+        node.style.transform = `translate3d(${driftX}px, ${driftY}px, 0) rotate(${rotate}deg)`;
+      }
       raf = requestAnimationFrame(loop);
     };
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
   }, []);
-  const t = tRef.current;
-  const driftX = Math.sin(t * 0.55) * (8 + (listening ? 22 : 0) + level * 26 * intensity);
-  const driftY = Math.cos(t * 0.4) * (6 + (listening ? 16 : 0) + level * 20 * intensity);
-  const rotate = Math.sin(t * 0.3) * 4;
+
   const Comp = { bloom: OrbBloom, petals: OrbPetals, mesh: OrbMesh, ribbon: OrbRibbon }[variant] || OrbBloom;
   return (
-    <div style={{
+    <div ref={orbitRef} style={{
       width: size, height: size, position: "relative",
-      transform: `translate3d(${driftX}px, ${driftY}px, 0) rotate(${rotate}deg)`,
       transition: "transform 60ms linear",
       filter: listening ? `drop-shadow(0 30px 60px ${ORB_COLORS.olive}55)` : `drop-shadow(0 20px 40px ${ORB_COLORS.forest}33)`,
     }}>
