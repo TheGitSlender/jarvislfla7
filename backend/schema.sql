@@ -49,7 +49,21 @@ create index if not exists knowledge_chunks_embedding_idx
     using ivfflat (embedding vector_cosine_ops)
     with (lists = 10);
 
--- 6. RPC function for similarity search (called by rag.py)
+-- 6. Auto-update updated_at on farm_profiles when row is modified
+create or replace function update_updated_at_column()
+returns trigger as $$
+begin
+    new.updated_at = now();
+    return new;
+end;
+$$ language plpgsql;
+
+create trigger farm_profiles_updated_at
+    before update on farm_profiles
+    for each row
+    execute function update_updated_at_column();
+
+-- 7. RPC function for similarity search (called by rag.py)
 create or replace function match_knowledge_chunks(
     query_embedding vector(768),
     match_count int,

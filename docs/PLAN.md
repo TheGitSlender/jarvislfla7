@@ -15,7 +15,18 @@
  4) Frontend on Vercel pointed at backend
  5) Smoke tests pass
 
- Phase 1 - Supabase Setup (20-30 min)
+ Status
+ - ✅ Phase 0: Backend deps installed (`venv/`, requirements pinned, transformers=4.51.3)
+ - ✅ Code fixes: optional session_id, 404 on missing profile, Darija system prompt, farm context every turn, startup env validation, Unicode guardrails, updated_at trigger
+ - ✅ Tests: 9 unit tests passing (guardrails, models, rag, chat)
+ - ✅ Docs: 6 files in `docs/` covering plan, state, setup, deploy, checklist
+ - ❌ Phase 1: Supabase project needed + schema.sql not yet run
+ - ❌ Phase 2: KB not seeded (blocked on Supabase key)
+ - ❌ Phase 3: Backend not deployed to Render
+ - ❌ Phase 4: Frontend not wired (NEXT_PUBLIC_API_URL not set)
+ - ❌ Phase 5: Smoke tests not run (blocked on Supabase)
+
+ Phase 1 - Supabase Setup (5 min)
  - Create a new Supabase project (free tier is sufficient)
  - Open SQL Editor and run `backend/schema.sql`
  - Copy API settings from Supabase:
@@ -24,8 +35,6 @@
  - Verify that demo profiles exist in `farm_profiles` table
 
  Phase 2 - Knowledge Base Seeding (15-25 min)
- - Install backend dependencies locally
- - Create `backend/.env` from `backend/.env.example`
  - Fill in: `GROQ_API_KEY`, `SUPABASE_URL`, `SUPABASE_KEY`, `HF_API_KEY`
  - Run `python seed_kb.py` to insert 46 curated chunks
 
@@ -39,11 +48,9 @@
    - `SUPABASE_URL`
    - `SUPABASE_KEY`
    - `HF_API_KEY`
- - Note: `HF_API_KEY` enables both STT and TTS in this repo
 
  Phase 4 - Frontend Wiring (Vercel) (10-15 min)
  - Set `NEXT_PUBLIC_API_URL` to the Render backend base URL
- - No frontend code changes required for backend wiring
 
  Phase 5 - Verification and Demo Readiness (15-30 min)
  - `GET /health` returns status

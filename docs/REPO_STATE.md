@@ -35,13 +35,18 @@
 
  Prompt Stack (from `backend/chat.py`)
  - System prompt enforces:
-   - Darija by default
+   - Darija by default (entire prompt written in Darija)
    - agriculture-only scope
    - conservative advice and escalation
    - no chemical mixing advice
- - Farm profile injected into user content on first message
+ - Farm profile injected into user content on **every** turn (not just first)
  - RAG chunks appended to current message
  - Low confidence adds escalation contact to system prompt
+
+ Startup Validation (`backend/main.py`)
+ - `GROQ_API_KEY`, `SUPABASE_URL`, `SUPABASE_KEY` checked at startup
+ - Missing vars raise `RuntimeError` immediately
+ - Missing `HF_API_KEY` logs a warning (non-blocking)
 
  RAG Details
  - Uses Supabase RPC `match_knowledge_chunks` (defined in `backend/schema.sql`)
@@ -50,7 +55,12 @@
 
  Guardrails
  - Keyword-based topic gate in `guardrails.py`
+ - Unicode-normalized keyword matching (handles accented French)
  - Dangerous patterns regex triggers a disclaimer append
+
+ Schema Notes
+ - `updated_at` on `farm_profiles` auto-updates via trigger
+ - `knowledge_chunks.embedding` is `vector(768)` — matches `multilingual-e5-base`
 
  Known Constraints (from repo docs)
  - Embedding vector is 768 dims

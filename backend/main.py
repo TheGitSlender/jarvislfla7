@@ -1,4 +1,6 @@
+import os
 import uuid
+import warnings
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from models import ChatRequest, ChatResponse
@@ -8,6 +10,19 @@ from stt import router as stt_router
 from tts import router as tts_router
 
 app = FastAPI(title="JarvisLfla7 API")
+
+
+@app.on_event("startup")
+def validate_env():
+    required = ["GROQ_API_KEY", "SUPABASE_URL", "SUPABASE_KEY"]
+    missing = [var for var in required if not os.environ.get(var)]
+    if missing:
+        raise RuntimeError(
+            f"Missing required environment variables: {', '.join(missing)}. "
+            f"Set them in backend/.env or in the deployment dashboard."
+        )
+    if not os.environ.get("HF_API_KEY"):
+        warnings.warn("HF_API_KEY not set — STT and TTS endpoints will return 503")
 
 app.add_middleware(
     CORSMiddleware,
