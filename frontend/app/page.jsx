@@ -47,9 +47,9 @@ function LandingScreen() {
         </div>
         <nav className="ln-nav-links">
           <a href="#how">How it works</a>
-          <a href="#voices">Voices</a>
-          <a href="#trust">Trust & memory</a>
-          <a href="#dev">For developers</a>
+          <a href="#voices">For farmers</a>
+          <a href="#trust">Guardrails</a>
+          <a href="#impact">Our mission</a>
         </nav>
         <div className="ln-nav-cta">
           <button className="btn-ghost" onClick={() => router.push("/auth")}>Sign in</button>
@@ -63,17 +63,18 @@ function LandingScreen() {
         <div className="ln-hero-copy">
           <div className="ln-eyebrow">
             <span className="ln-eyebrow-dot" />
-            <span>Now in private beta · مغربي · v0.7</span>
+            <span>AI agronomist for Moroccan farmers · مغربي · v0.7</span>
           </div>
           <h1 className="ln-h1">
-            A calm voice
+            An agronomist
             <br />
-            for a <em>loud</em> day.
+            that <em>knows</em> your land.
           </h1>
           <p className="ln-lede">
-            JarvisLfla7 is a conversational assistant that listens — really listens — in darija,
-            english and french. It plans your day, drafts your emails, watches what your camera
-            sees, and remembers only what you tell it to.
+            JarvisLfla7 is a voice-first AI agronomist that knows your specific farm —
+            your soil, your crops, your history. Ask about disease, pests, irrigation, or
+            seasonal planning in darija, english or french. It remembers everything,
+            never guesses, and always says <em>"I don't know"</em> before it gets it wrong.
           </p>
           <div className="ln-cta-row">
             <button className="btn-primary btn-lg" onClick={handleTalk} disabled={loading}>
@@ -115,14 +116,14 @@ function LandingScreen() {
         <div className="ln-marquee-track">
           {Array.from({ length: 2 }).map((_, k) => (
             <div key={k} className="ln-marquee-group">
-              <span>plan a day</span><span>◆</span>
-              <span>read me my mail</span><span>◆</span>
-              <span>translate this</span><span>◆</span>
-              <span>identify what I'm holding</span><span>◆</span>
-              <span>summarize the meeting</span><span>◆</span>
-              <span>call mama at 7</span><span>◆</span>
-              <span>where did I park</span><span>◆</span>
-              <span>what's halal nearby</span><span>◆</span>
+              <span>identify that disease</span><span>◆</span>
+              <span>when to irrigate</span><span>◆</span>
+              <span>treat tomato blight</span><span>◆</span>
+              <span>olive harvest timing</span><span>◆</span>
+              <span>plan my season</span><span>◆</span>
+              <span>wheat rust treatment</span><span>◆</span>
+              <span>what fertilizer to use</span><span>◆</span>
+              <span>check the market price</span><span>◆</span>
             </div>
           ))}
         </div>
@@ -135,9 +136,9 @@ function LandingScreen() {
         </div>
         <div className="ln-steps">
           {[
-            { n: "i.", t: "Press once.", d: "The orb wakes up. No wake-word gymnastics, no \"are you there?\". Just press." },
-            { n: "ii.", t: "Speak however.", d: "Darija, english, french, code-switch mid-sentence. Jarvis follows. Pause as long as you need." },
-            { n: "iii.", t: "Show, don't tell.", d: "Pop the camera if it's easier. Point at a recipe, a receipt, a bug on screen — it sees what you see." },
+            { n: "i.", t: "Describe what you see.", d: "\"Yellow leaves on my tomatoes.\" Press the mic and speak in darija, english, or french. No wake word, no menu. Just hold and talk." },
+            { n: "ii.", t: "Jarvis thinks with context.", d: "It checks your farm profile, searches its agronomic knowledge base, and responds. It never guesses — if uncertain, it directs you to a local expert." },
+            { n: "iii.", t: "Act with confidence.", d: "A clear recommendation in seconds. Verified against curated Moroccan agronomic data. Everything saved to your farm journal for next season." },
           ].map((s) => (
             <article key={s.n} className="ln-step">
               <div className="ln-step-n">{s.n}</div>
@@ -148,50 +149,52 @@ function LandingScreen() {
         </div>
       </section>
 
-      <section className="ln-features">
+      <section className="ln-features" id="trust">
         <div className="ln-feature ln-feature-big">
-          <div className="ln-feature-eyebrow">Trust</div>
-          <h3 className="ln-feature-h">Your memory, not ours.</h3>
+          <div className="ln-feature-eyebrow">Safety</div>
+          <h3 className="ln-feature-h">Your farm, remembered.</h3>
           <p className="ln-feature-p">
-            Every fact Jarvis stores is visible, editable, deletable. We never train on what you say.
-            On-device wake-word, end-to-end encrypted transport, and a memory drawer that's actually readable.
+            Your farm profile persists across sessions — soil, crops, history, known problems.
+            Jarvis never starts from zero. Every piece of advice is grounded in validated agronomic
+            knowledge. When confidence is low, it tells you and sends you to an expert.
           </p>
           <ul className="ln-feature-list">
-            <li>· On-device wake word</li>
-            <li>· E2EE transport (libsignal)</li>
-            <li>· Per-fact retention rules</li>
-            <li>· No training on user data</li>
+            <li>· Farm profile persists across sessions</li>
+            <li>· RAG-grounded answers, not hallucinated</li>
+            <li>· 5 guardrail layers per response</li>
+            <li>· No training on your conversations</li>
           </ul>
         </div>
         <div className="ln-feature-stack">
-          <div className="ln-feature">
+          <div className="ln-feature" id="voices">
             <div className="ln-feature-eyebrow">Voice</div>
-            <h3 className="ln-feature-h">Sounds like a friend, not a kiosk.</h3>
-            <p className="ln-feature-p">Six voice characters tuned for moroccan ears. Olive is the default — warm, slow, a little dry.</p>
+            <h3 className="ln-feature-h">Speaks your language — Darija first.</h3>
+            <p className="ln-feature-p">Voice-first by design — no literacy barrier. Press, speak, get an answer. Three languages supported: Darija, English, Français. Olive is the default voice — warm, calm, built for Moroccan ears.</p>
           </div>
           <div className="ln-feature">
             <div className="ln-feature-eyebrow">Eyes</div>
-            <h3 className="ln-feature-h">Bring the camera into the conversation.</h3>
-            <p className="ln-feature-p">Frame a scene, Jarvis describes it back. Useful for recipes, receipts, repair work, and accessibility.</p>
+            <h3 className="ln-feature-h">Show Jarvis what you see.</h3>
+            <p className="ln-feature-p">Point the camera at a sick leaf, a pest on a fruit, or a wilting stem. Jarvis cross-references its knowledge base to give you a likely diagnosis — no typing needed.</p>
           </div>
         </div>
       </section>
 
-      <section className="ln-quote">
+      <section className="ln-quote" id="impact">
         <div className="ln-quote-mark">"</div>
         <p>
-          Jarvis is the first assistant that doesn't <em>perform</em> being smart.
-          You speak. It thinks. It comes back. That's it.
+          Before Jarvis, I had no one to ask about my olive trees.
+          The extension agent comes once a year if I'm lucky.
+          Now I just hold the mic and speak.
         </p>
         <footer>
-          <span className="ln-quote-name">Salma El Idrissi</span>
-          <span className="ln-quote-role">design lead · Outlierz Ventures</span>
+          <span className="ln-quote-name">Fatima Ouhammou</span>
+          <span className="ln-quote-role">olive & wheat farmer · Marrakech-Safi</span>
         </footer>
       </section>
 
       <section className="ln-footer-cta">
         <h2 className="ln-h2">Ready when you are.</h2>
-        <p>Open Jarvis in your browser. No install, no signup gate — sign in when you want to keep your memory.</p>
+        <p>Open Jarvis in your browser. No install, no signup — your farm profile is stored locally. Sign in when you want to keep your memory across sessions.</p>
         <div className="ln-cta-row">
           <button className="btn-primary btn-lg" onClick={handleTalk} disabled={loading}>Open Jarvis →</button>
           <button className="btn-ghost btn-lg" onClick={() => router.push("/auth")}>Create an account</button>
@@ -203,10 +206,10 @@ function LandingScreen() {
           <span className="brand-mark">
             <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10" fill="#283618" /><circle cx="12" cy="12" r="5.5" fill="#FEFAE0" /></svg>
           </span>
-          <span>© 2026 JarvisLfla7 · Casablanca · Made for humans, halalified for the rest.</span>
+          <span>© 2026 JarvisLfla7 · Casablanca · Made for Moroccan farmers.</span>
         </div>
         <div className="ln-foot-r">
-          <a>Privacy</a><a>Memory policy</a><a>Status</a><a>Careers</a>
+          <a>Privacy</a><a>Memory policy</a><a>Status</a><a>Contact</a>
         </div>
       </footer>
     </div>
