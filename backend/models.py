@@ -17,7 +17,7 @@ class FarmProfile(BaseModel):
 class ChatRequest(BaseModel):
     farmer_id: str
     message: str
-    session_id: str
+    session_id: str | None = None
 
 
 class ChatResponse(BaseModel):

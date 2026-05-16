@@ -1,5 +1,5 @@
 import uuid
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from models import ChatRequest, ChatResponse
 from chat import chat as run_chat
@@ -25,7 +25,10 @@ app.include_router(tts_router)
 def chat_endpoint(req: ChatRequest):
     if not req.session_id:
         req.session_id = str(uuid.uuid4())
-    response_text, low_confidence = run_chat(req.farmer_id, req.message, req.session_id)
+    try:
+        response_text, low_confidence = run_chat(req.farmer_id, req.message, req.session_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
     return ChatResponse(
         response=response_text,
         session_id=req.session_id,

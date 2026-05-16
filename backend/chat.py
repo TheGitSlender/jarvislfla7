@@ -121,7 +121,9 @@ def chat(farmer_id: str, message: str, session_id: str) -> tuple[str, bool]:
 
     # Load farm profile
     profile_result = db.table("farm_profiles").select("*").eq("id", farmer_id).single().execute()
-    profile = profile_result.data or {}
+    if not profile_result.data:
+        raise ValueError("Profile not found")
+    profile = profile_result.data
 
     # Load conversation history
     history = get_conversation_history(farmer_id, session_id)
