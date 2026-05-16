@@ -5,6 +5,7 @@ from models import ChatRequest, ChatResponse
 from chat import chat as run_chat
 from farmer_profile import router as profile_router
 from stt import router as stt_router
+from tts import router as tts_router
 
 app = FastAPI(title="AgroCopilot API")
 
@@ -17,6 +18,7 @@ app.add_middleware(
 
 app.include_router(profile_router)
 app.include_router(stt_router)
+app.include_router(tts_router)
 
 
 @app.post("/api/chat", response_model=ChatResponse)

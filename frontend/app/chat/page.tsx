@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { sendChat, transcribeAudio, getProfile } from "@/lib/api";
+import { sendChat, transcribeAudio, getProfile, fetchTTS } from "@/lib/api";
 import { Suspense } from "react";
 
 interface Message {
@@ -45,7 +45,16 @@ function ChatInterface() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
-  const speak = useCallback((text: string) => {
+  const speak = useCallback(async (text: string) => {
+    // Primary: facebook/mms-tts-ara via backend
+    const audioUrl = await fetchTTS(text);
+    if (audioUrl) {
+      const audio = new Audio(audioUrl);
+      audio.onended = () => URL.revokeObjectURL(audioUrl);
+      audio.play().catch(() => {});
+      return;
+    }
+    // Fallback: browser speechSynthesis
     if (typeof window === "undefined" || !window.speechSynthesis) return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);

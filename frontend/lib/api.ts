@@ -44,3 +44,24 @@ export async function transcribeAudio(blob: Blob): Promise<string> {
   const data = await res.json();
   return data.transcript as string;
 }
+
+/**
+ * Calls /api/tts (facebook/mms-tts-ara via HF Inference).
+ * Returns an object URL for the audio blob, or null if the backend
+ * returned an error (caller should fall back to browser speechSynthesis).
+ */
+export async function fetchTTS(text: string): Promise<string | null> {
+  try {
+    const res = await fetch(`${API}/api/tts`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+    });
+    if (!res.ok) return null;
+    const blob = await res.blob();
+    if (blob.size === 0) return null;
+    return URL.createObjectURL(blob);
+  } catch {
+    return null;
+  }
+}

@@ -64,43 +64,35 @@ All frontend files written:
 
 ## Pending Decisions
 
-### ⚠️ PD-1 — LLM Choice
+### ✅ PD-1 — LLM Choice → **Groq / llama-3.3-70b-versatile**
 
-**Context:** Originally Claude API. Switching to open-source only. No Anthropic.
+**Decided:** Groq free tier, `llama-3.3-70b-versatile`.
+- `chat.py` now uses `groq` SDK (OpenAI-compatible `.chat.completions.create`)
+- `anthropic` package removed from `requirements.txt`
+- `.env` key renamed `ANTHROPIC_API_KEY` → `GROQ_API_KEY`
+- System prompt instructs Darija output — model follows reliably
 
-**Options:**
+**Get key:** console.groq.com → sign up → API Keys → Create Key (instant, no credit card)
 
-| Option | Model | API | Darija | Speed | Tradeoff |
-|---|---|---|---|---|---|
-| **A** | `llama-3.3-70b-versatile` | Groq free | Good (prompted) | ~300 tok/s, instant | Not Darija-fine-tuned |
-| **B** | `MBZUAI-Paris/Atlas-Chat-9B` | HF Inference free | Best (built for Darija) | Slow, cold starts 20–30s | May die during demo |
-| **C** | `qwen2.5:7b` | Ollama local | Good | Depends on hardware | No API key needed |
-
-**Leaning toward:** Option A (Groq) — demo reliability trumps Darija specialization. System prompt instructs Darija output; Llama 3.3 70B follows this reliably.
-
-**Impact on code:** `chat.py` needs Anthropic client replaced with Groq SDK (`groq` package, OpenAI-compatible).
-
-**Decision needed from:** You. Confirm Groq, HF, or Ollama.
+**Free tier limits:**
+- `llama-3.3-70b-versatile`: 6,000 tokens/min, 14,400 requests/day, 30 req/min
+- More than enough for a hackathon demo
 
 ---
 
-### ⚠️ PD-2 — TTS Choice
+### ✅ PD-2 — TTS Choice → **facebook/mms-tts-ara via HF Inference + browser fallback**
 
-**Context:** Originally ElevenLabs. Switching to open-source only.
+**Decided:** `facebook/mms-tts-ara` as primary, browser `speechSynthesis(lang='ar')` as fallback.
+- New `backend/tts.py` — `POST /api/tts` → calls HF, returns `audio/flac` bytes
+- `frontend/lib/api.ts` — `fetchTTS()` fetches audio, creates object URL
+- `frontend/app/chat/page.tsx` — `speak()` now async: tries backend TTS first, falls back to browser
+- Uses the same `HF_API_KEY` already needed for STT — no extra key
 
-**Options:**
-
-| Option | Model | How | Arabic quality | Tradeoff |
-|---|---|---|---|---|
-| **A** | Browser `speechSynthesis` | Built-in, zero setup | Poor MSA | No API, instant, sounds robotic |
-| **B** | `facebook/mms-tts-ara` | HF Inference API | Decent MSA Arabic | Not Darija-specific, free |
-| **C** | `medmac01/Darija-Arabic-TTS` | HF Space/API | Darija-tuned | Experimental, may be flaky |
-
-**Leaning toward:** Option B (`mms-tts-ara`) as primary, Option A as fallback. Returns audio bytes → play client-side. Sounds better than browser TTS.
-
-**Impact on code:** `stt.py` (or new `tts.py`) needs an endpoint that calls HF `mms-tts-ara` and returns audio. Frontend plays the response audio blob instead of calling `speechSynthesis`.
-
-**Decision needed from:** You. Confirm TTS approach.
+**HuggingFace free tier limits (Inference API):**
+- ~1,000 requests/day on free tier across all models
+- Rate limit: varies, typically 10–30 req/min
+- Model: returns FLAC audio, ~50–200 KB per clip
+- Input capped at 500 chars in `tts.py` to avoid silent truncation
 
 ---
 

@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-import anthropic
+from groq import Groq
 from dotenv import load_dotenv
 from db import get_db
 from rag import retrieve
@@ -151,7 +151,7 @@ def chat(farmer_id: str, message: str, session_id: str) -> tuple[str, bool]:
             "content": f"{rag_context}\n\nMessage de l'agriculteur : {message}",
         })
 
-    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+    client = Groq(api_key=os.environ["GROQ_API_KEY"])
 
     # Layer 2: confidence gate already handled in build_rag_context
     system = SYSTEM_PROMPT
@@ -159,13 +159,12 @@ def chat(farmer_id: str, message: str, session_id: str) -> tuple[str, bool]:
         escalation = get_escalation_contact(profile.get("region"))
         system += f"\n\nPour toute orientation, l'institution de contact appropriée dans cette région est : {escalation}"
 
-    response = client.messages.create(
-        model="claude-sonnet-4-5",
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
         max_tokens=400,
-        system=system,
-        messages=messages,
+        messages=[{"role": "system", "content": system}, *messages],
     )
-    reply = response.content[0].text
+    reply = response.choices[0].message.content or ""
 
     # Layer 3 is enforced via system prompt (no additional post-processing for MVP)
     # Flag if dangerous patterns detected but still return response with warning
