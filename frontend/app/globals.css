@@ -667,7 +667,7 @@ button { font-family: inherit; }
 .ln-marquee-group { display: inline-flex; align-items: center; gap: 32px; }
 .ln-marquee-group span {
   font-family: var(--serif); font-size: 28px; font-style: italic;
-  color: var(--cornsilk);
+  color: var(--olive-soft);
 }
 .ln-marquee-group span:nth-child(2n) {
   font-family: var(--sans); font-style: normal; font-size: 20px; color: var(--olive-soft);
