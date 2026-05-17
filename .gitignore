@@ -7,6 +7,7 @@ backend/venv/
 backend/__pycache__/
 backend/**/__pycache__/
 **/*.pyc
+backend/.pytest_cache/
 *.db
 *.db-shm
 *.db-wal
@@ -17,7 +18,18 @@ frontend/node_modules/
 frontend/package-lock.json
 frontend/tsconfig.tsbuildinfo
 
+# os
+.DS_Store
+Thumbs.db
+
+# ide
+.vscode/
+.idea/
+
 # misc
 src/
 FIXES.md
 jarvislfla7.zip
+*.egg-info/
+dist/
+build/
