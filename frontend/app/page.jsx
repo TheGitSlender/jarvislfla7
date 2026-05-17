@@ -5,16 +5,6 @@ import { useRouter } from "next/navigation";
 import Orb from "@/components/orb";
 import { fetchFarmers } from "@/lib/api";
 
-const ORB_COLORS = {
-  forest: "#283618",
-  olive: "#606C38",
-  oliveBright: "#7C8B45",
-  cornsilk: "#FEFAE0",
-  cream: "#F5EFD3",
-  mint: "#A7B47A",
-  oliveSoft: "#A7B47A",
-};
-
 function LandingScreen() {
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
